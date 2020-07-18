@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,6 +54,7 @@ public class EventsIntegrationTests {
             User newUser = new User();
             newUser.setUsername("testUser");
             newUser.setPassword(passwordEncoder.encode("pass"));
+            newUser.setPasswordToConfirm(passwordEncoder.encode("pass"));
             newUser.setEmail("testUser@codeup.com");
             testUser = usersDao.save(newUser);
         }
@@ -60,7 +62,8 @@ public class EventsIntegrationTests {
         //Throws a POST request to /login and expect a redirection to the Events index page after being logged in
         httpSession = this.mvc.perform(post("/login").with(csrf())
             .param("username", "testUser")
-            .param("password", "pass"))
+            .param("password", "pass")
+            .param("passwordToConfirm", "pass"))
             .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl("/events"))
             .andReturn()
@@ -79,6 +82,21 @@ public class EventsIntegrationTests {
     public void testIfUserSessionIsActive() throws Exception {
         //make sure the returned the user session is active and not null
         assertNotNull(httpSession);
+    }
+
+    @Test
+    public void testCreateEvent() throws Exception {
+
+        //makes a post request to /events/create and expect a redirection to the Event
+        this.mvc.perform(
+                post("/events/create").with(csrf())
+                        .session((MockHttpSession) httpSession)
+                        //add all the required parameters to the request
+                        .param("title", "testTitle")
+                        .param("location", "testLocation")
+                        .param("dateAndTime", "testDateAndTime"))
+                .andExpect(status().is3xxRedirection());
+
     }
 
 
