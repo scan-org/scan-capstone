@@ -4,6 +4,7 @@ import com.scan4kids.project.daos.EventsRepository;
 import com.scan4kids.project.daos.UsersRepository;
 import com.scan4kids.project.models.User;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.HttpSession;
 
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -65,7 +67,18 @@ public class EventsIntegrationTests {
             .getRequest()
             .getSession();
 
+    }
 
+    @Test
+    public void contextLoads() {
+        //sanity test, to make sure the MVC bean is working
+        assertNotNull(mvc);
+    }
+
+    @Test
+    public void testIfUserSessionIsActive() throws Exception {
+        //make sure the returned the user session is active and not null
+        assertNotNull(httpSession);
     }
 
 
