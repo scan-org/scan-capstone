@@ -62,8 +62,7 @@ public class EventsIntegrationTests {
         //Throws a POST request to /login and expect a redirection to the Events index page after being logged in
         httpSession = this.mvc.perform(post("/login").with(csrf())
             .param("username", "testUser")
-            .param("password", "pass")
-            .param("passwordToConfirm", "pass"))
+            .param("password", "pass"))
             .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl("/events"))
             .andReturn()
