@@ -1,4 +1,4 @@
-# https://scan4kids.site
+# scan4kids
 
 A full-stack web application for an actual non-profit organization, Supporters of Children with Additional Needs (S.C.A.N.), made with Spring Boot 
 
